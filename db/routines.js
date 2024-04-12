@@ -12,13 +12,16 @@ const getAllRoutines = async () => {
   }
 }
 
-const createRoutines = async (routineIsPublic, routineName, routineGoal) => {
+const createRoutines = async (is_public, name, goal) => {
   try {
-   const {rows: [newleyCreatedRoutine]} = await client.query(`
+    console.log(is_public, name, goal);
+   const x = await client.query(`
       INSERT INTO routines (is_public, name, goal)
-      VALUES ('${routineIsPublic}', '${routineName}', '${routineGoal}')
+      VALUES(${is_public}, '${name}', '${goal}')
       RETURNING *;
     `);
+    console.log(x);
+    return x;
   } catch (error) {
     console.log(error)
   }

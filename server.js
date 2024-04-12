@@ -1,9 +1,10 @@
 const express = require('express');
 const { createActivities, getAllActivities, getActivityById } = require('./db/activities.js');
-const { getAllRoutines, getOneRoutineById } = require('./db/routines.js')
+const { getAllRoutines, getOneRoutineById, createRoutines } = require('./db/routines.js')
 const client = require('./db/client.js');
 client.connect();
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -61,12 +62,10 @@ app.post('/api/v1/activities', async(req, res, next) => {
 app.post('/api/v1/routines', async(req, res, next) => {
   try {
     const {is_public, name, goal} = req.body;
-    const newRoutine = await createRoutine(is_public, name, goal);
-    console.log(newRoutine);
-
-
-    
+    const newRoutine = await createRoutines(is_public, name, goal);
+    res.send(newRoutine) 
   } catch (error) {
+    console.log(error)
     
   }
 })
