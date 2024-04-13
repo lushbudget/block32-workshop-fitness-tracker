@@ -17,7 +17,7 @@ const createRoutines = async (is_public, name, goal) => {
     console.log(is_public, name, goal);
    const x = await client.query(`
       INSERT INTO routines (is_public, name, goal)
-      VALUES(${is_public}, '${name}', '${goal}')
+      VALUES (${is_public}, '${name}', '${goal}')
       RETURNING *;
     `);
     console.log(x);
@@ -41,8 +41,27 @@ const getOneRoutineById = async (id) => {
     
   }
 }
+
+const deleteRoutine = async (id) => {
+  
+  try {
+    const {rows} = await client.query(`
+    DELETE FROM routines
+    WHERE id = ${id}
+    RETURNING *
+    `)
+    return rows;
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
 module.exports = {
   createRoutines,
   getAllRoutines,
-  getOneRoutineById
+  getOneRoutineById,
+  deleteRoutine
 }

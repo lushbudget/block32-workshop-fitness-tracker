@@ -1,8 +1,9 @@
 const express = require('express');
 const { createActivities, getAllActivities, getActivityById } = require('./db/activities.js');
-const { getAllRoutines, getOneRoutineById, createRoutines } = require('./db/routines.js')
+const { getAllRoutines, getOneRoutineById, createRoutines, deleteRoutine } = require('./db/routines.js')
 const client = require('./db/client.js');
 client.connect();
+console.log(`CONNECTED`)
 const app = express();
 
 app.use(express.json());
@@ -68,6 +69,19 @@ app.post('/api/v1/routines', async(req, res, next) => {
     console.log(error)
     
   }
+});
+
+app.delete('/api/v1/routines/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedRoutine  = await deleteRoutine(id);
+    res.send(deletedRoutine);
+    
+  } catch (error) {
+    next(error);
+    
+  }
+
 })
 
 app.listen(8080, () => {
