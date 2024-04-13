@@ -1,5 +1,5 @@
 const express = require('express');
-const { createActivities, getAllActivities, getActivityById } = require('./db/activities.js');
+const { createActivities, getAllActivities, getActivityById, deleteActivity } = require('./db/activities.js');
 const { getAllRoutines, getOneRoutineById, createRoutines, deleteRoutine } = require('./db/routines.js')
 const client = require('./db/client.js');
 client.connect();
@@ -17,16 +17,6 @@ app.get('/api/v1/activities', async (req, res, next) => {
     next(error)
   }
 })
-app.get('/api/v1/routines', async (req, res, next) => {
-  try {
-    const allRoutines = await getAllRoutines();
-    res.send(allRoutines)
-
-  } catch (error) {
-    next(error)
-
-  }
-})
 
 app.get('/api/v1/activities/:id', async (req, res, next) => {
   try {
@@ -40,16 +30,6 @@ app.get('/api/v1/activities/:id', async (req, res, next) => {
   }
 });
 
-app.get('/api/v1/routines/:id', async (req, res, next) => {
-  try { 
-    const { id } = req.params;
-    const oneRoutineById = await getOneRoutineById(id);
-    res.send(oneRoutineById);
-  } catch (error) {
-    next(error)
-  }
-});
-
 app.post('/api/v1/activities', async(req, res, next) => {
   try {
     const {name, description} = req.body;
@@ -59,6 +39,39 @@ app.post('/api/v1/activities', async(req, res, next) => {
     next(error);
   }
 })
+
+app.delete('/api/v1/activities/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedActivity = await deleteActivity(id);
+    res.send(deletedActivity);
+    
+  } catch (error) {
+    next(error)
+    
+  }
+})
+
+app.get('/api/v1/routines', async (req, res, next) => {
+  try {
+    const allRoutines = await getAllRoutines();
+    res.send(allRoutines)
+
+  } catch (error) {
+    next(error)
+
+  }
+})
+
+app.get('/api/v1/routines/:id', async (req, res, next) => {
+  try { 
+    const { id } = req.params;
+    const oneRoutineById = await getOneRoutineById(id);
+    res.send(oneRoutineById);
+  } catch (error) {
+    next(error)
+  }
+});
 
 app.post('/api/v1/routines', async(req, res, next) => {
   try {
@@ -79,9 +92,7 @@ app.delete('/api/v1/routines/:id', async (req, res, next) => {
     
   } catch (error) {
     next(error);
-    
   }
-
 })
 
 app.listen(8080, () => {

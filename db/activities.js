@@ -40,8 +40,25 @@ const createActivities = async (activityName, activityDescription) => {
   }
 }
 
+const deleteActivity = async(id)=> {
+  try {
+    const { rows } = client.query(`
+      DELETE FROM activities
+      WHERE id = ${id}
+      RETURNING *;
+      `)
+      console.log(rows);
+      return rows;
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
 module.exports = {
   createActivities,
   getAllActivities,
-  getActivityById
+  getActivityById,
+  deleteActivity
 }
