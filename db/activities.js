@@ -47,7 +47,6 @@ const deleteActivity = async(id)=> {
       WHERE id = ${id}
       RETURNING *;
       `)
-      console.log(rows);
       return rows;
     
   } catch (error) {
